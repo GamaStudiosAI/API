@@ -1,0 +1,49 @@
+//Integrate the GamaStudios AI API using C++.
+//Before you start, you will need to have an account on our website at https://gamastudios.xyz/ and obtain the API key.
+//Here is a simple example of how to send a POST request to the GamaStudios AI API in C++:
+
+c++
+#include <iostream>
+#include <curl/curl.h>
+#include <string>
+
+int main()
+{
+     CURL* curl;
+     CURLcode res;
+     std::string apiKey = "YOUR_API_KEY_HERE";
+     std::string endpoint = "https://api.gamastudios.xyz";
+
+     curl_global_init(CURL_GLOBAL_ALL);
+     curl = curl_easy_init();
+
+     if (curl)
+     {
+         struct curl_slist* chunk = nullptr;
+         chunk = curl_slist_append(chunk, "Content-Type: application/json");
+         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
+
+         std::string message = "{\"text\": \"Hello, how are you?\"}";
+
+         curl_easy_setopt(curl, CURLOPT_URL, (endpoint + "/chatbot").c_str());
+         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, message.c_str());
+         curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, message.length());
+         curl_easy_setopt(curl, CURLOPT_POST, 1L);
+
+         res = curl_easy_perform(curl);
+         if (res != CURLE_OK)
+         {
+             std::cout << "Error sending request: " << curl_easy_strerror(res) << std::endl;
+         }
+
+         curl_easy_cleanup(curl);
+     }
+     curl_global_cleanup();
+
+     return 0;
+}
+```
+
+//This example sends a request to the GamaStudios AI API using the POST method and receives a response in JSON format. You can customize the text message to your needs by changing the value in `message`.
+
+//Remember to replace "YOUR_KEY_OF_API_HERE" with your API key, otherwise requests will not be able to authenticate.
